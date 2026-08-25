@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-08-25T18:15:00Z",
+  "headline": "Prelaunch",
+  "message": "OpenE2EE has not launched. No production incident is active.",
+  "services": [
+    "Managed Relay: prelaunch",
+    "Signal Protocol SDK: prelaunch"
+  ],
+  "state": "prelaunch"
+}
