@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 
 const source = JSON.parse(await readFile("status.json", "utf8"));
 const fields = ["generatedAt", "headline", "message", "services", "state"];
@@ -84,9 +84,12 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="no-referrer">
   <title>OpenE2EE emergency status</title>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <style>
     :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
@@ -122,6 +125,9 @@ const html = `<!doctype html>
 `;
 
 await mkdir("public", { recursive: true });
+for (const file of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png']) {
+  await copyFile(`brand/${file}`, `public/${file}`);
+}
 await writeFile("public/index.html", html, "utf8");
 await writeFile("public/status.json", `${JSON.stringify(source, null, 2)}\n`, "utf8");
 await writeFile("public/.nojekyll", "", "utf8");
